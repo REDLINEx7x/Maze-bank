@@ -52,7 +52,7 @@ class MazeGenerator:
             for _ in range(self.height)
         ]
 
-    def _creatr_42_pattern(self, visited: list[list[bool]]):
+    def _create_42_pattern(self, visited: list[list[bool]]):
 
         pattern = [
             "#   ###",
@@ -64,7 +64,7 @@ class MazeGenerator:
         patt_height = len(pattern)
         patt_width = len(pattern[0])
 
-        if(self.height < patt_height + 2 and self.width > patt_width + 2):
+        if(self.height < patt_height + 2 or self.width < patt_width + 2):
              return
 
         start_row = (self.height - patt_height) // 2
@@ -74,7 +74,7 @@ class MazeGenerator:
              for po_c, char in enumerate(line):
                   if char == "#":
                     r, c = start_row + po_r, start_col + po_c
-                    self.grid[r][c] = 15
+                    self.grid[r][c] = 0xF
                     visited[r][c] = True
     def _carve(self):
         # Track which cells we've visited
@@ -84,7 +84,7 @@ class MazeGenerator:
         ]
         start_row = self.entry[1]
         start_col = self.entry[0]
-        self._creatr_42_pattern(visited)
+        self._create_42_pattern(visited)
         self._starting_carve(start_row, start_col, visited)
 
     def _starting_carve(self, row: int, col: int, visited: list[list[bool]]) -> None:
@@ -114,6 +114,38 @@ class MazeGenerator:
             # Recurse into the neighbor
             self._starting_carve(new_row, new_col, visited)
 
+    #def _open_borders(self):
+    #     d
+
+
+def display_visual_maze(grid: list[list[int]]) -> None:
+    """Draws the maze in the terminal using ASCII characters."""
+    height = len(grid)
+    width = len(grid[0])
+
+    # Rsem l-7it l-foqani kamel
+    print("+" + "---+" * width)
+
+    for row in grid:
+        # 1. Rsem l-biban dial l-West/East (Vertical)
+        line = "|"
+        for cell in row:
+            # Check East wall (bit 1 = 2)
+            if cell & 2:
+                line += "   |"
+            else:
+                line += "    "
+        print(line)
+
+        # 2. Rsem l-biban dial l-North/South (Horizontal)
+        bottom = "+"
+        for cell in row:
+            # Check South wall (bit 2 = 4)
+            if cell & 4:
+                bottom += "---+"
+            else:
+                bottom += "   +"
+        print(bottom)
 
 config_data = parse_config("config.txt")
 
@@ -126,5 +158,4 @@ maze = MazeGenerator(
 )
 
 maze.generate()
-
-print(maze.grid)
+display_visual_maze(maze.grid)
