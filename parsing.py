@@ -35,6 +35,27 @@ def parse_config(filename: str) -> dict[str, Any]:
                     final_config[key] = False
                 else:
                     raise Exception("invalid configuration")
+
+        width  = final_config["WIDTH"]
+        height = final_config["HEIGHT"]
+        entry  = final_config["ENTRY"]
+        exit_  = final_config["EXIT"]
+        ex, ey = entry
+        xx, xy = exit_
+
+        if not (0 <= ex < width and 0 <= ey < height):
+            raise Exception(
+                f"ENTRY {entry} is outside maze bounds ({width}x{height})."
+            )
+
+        if not (0 <= xx < width and 0 <= xy < height):
+            raise Exception(
+                f"EXIT {exit_} is outside maze bounds ({width}x{height})."
+            )
+
+        if entry == exit_:
+            raise Exception("ENTRY and EXIT must be different cells.")
+
         return final_config
 
 
