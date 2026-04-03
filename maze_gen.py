@@ -2,6 +2,8 @@ from typing import Any, Callable, Optional
 import random
 from collections import deque
 from parsing import parse_config
+from maze_solve import solve
+
 NORTH = 1
 EAST  = 2
 SOUTH = 4
@@ -31,20 +33,16 @@ class MazeGenerator:
         self.exit = exit
         self.perfect = perfect
         self.grid: list[list[int]] = []
-        self.solution: list[str] = []
 
     def generate(self):
             #import random
             #random.seed(self.seed)      # we need to add seed in config_file
 
-            self._init_grid()           # 1. all walls closed
+        self._init_grid()           # 1. all walls closed
             #self._create_42_pattern()            # 5. for "42" pattern
-            self._carve()               # 2. carve passages
-            #self._open_borders()        # 3. open entry/exit
+        self._carve()               # 2. carve passages
             #if not self.perfect:
             #    self._add_loops()       # 4. optional: extra paths
-            #self.solution = self._solve() # 6. find the path
-
     def _init_grid(self):
             # Fill every cell with 15 = all walls closed
             self.grid = [
@@ -69,11 +67,16 @@ class MazeGenerator:
 
         start_row = (self.height - patt_height) // 2
         start_col = (self.width - patt_width) // 2
+        entry_cell = (self.entry[1], self.entry[0])
+        exit_cell  = (self.exit[1],  self.exit[0])
 
         for po_r, line in enumerate(pattern):
              for po_c, char in enumerate(line):
                   if char == "#":
-                    r, c = start_row + po_r, start_col + po_c
+                    r = start_row + po_r
+                    c = start_col + po_c
+                    if (r, c) == entry_cell or (r, c) == exit_cell:
+                        continue
                     self.grid[r][c] = 0xF
                     visited[r][c] = True
     def _carve(self):
@@ -114,48 +117,56 @@ class MazeGenerator:
             # Recurse into the neighbor
             self._starting_carve(new_row, new_col, visited)
 
-    #def _open_borders(self):
-    #     d
-
-
-def display_visual_maze(grid: list[list[int]]) -> None:
-    """Draws the maze in the terminal using ASCII characters."""
+def display_maze_with_solution(grid: list[list[int]], entry: tuple[int, int], path: list[str]) -> None:
     height = len(grid)
     width = len(grid[0])
 
-    # Rsem l-7it l-foqani kamel
+    solution_cells = set()
+    curr_r, curr_c = entry[1], entry[0]
+    solution_cells.add((curr_r, curr_c))
+
+    for move in path:
+        if move == 'N': curr_r -= 1
+        elif move == 'S': curr_r += 1
+        elif move == 'E': curr_c += 1
+        elif move == 'W': curr_c -= 1
+        solution_cells.add((curr_r, curr_c))
+
+    # 2. R-Resm
     print("+" + "---+" * width)
 
-    for row in grid:
-        # 1. Rsem l-biban dial l-West/East (Vertical)
+    for r, row in enumerate(grid):
         line = "|"
-        for cell in row:
-            # Check East wall (bit 1 = 2)
+        for c, cell in enumerate(row):
+            char = " . " if (r, c) in solution_cells else "   "
+
             if cell & 2:
-                line += "   |"
+                line += char + "|"
             else:
-                line += "    "
+                line += char + " "
         print(line)
 
-        # 2. Rsem l-biban dial l-North/South (Horizontal)
         bottom = "+"
-        for cell in row:
-            # Check South wall (bit 2 = 4)
+        for c, cell in enumerate(row):
             if cell & 4:
                 bottom += "---+"
             else:
                 bottom += "   +"
         print(bottom)
+try:
+    config_data = parse_config("config.txt")
 
-config_data = parse_config("config.txt")
+    maze = MazeGenerator(
+        width=config_data['WIDTH'],
+        height=config_data['HEIGHT'], # Reproducibility daroriya
+        entry=config_data['ENTRY'],
+        exit=config_data['EXIT'],
+        perfect=config_data['PERFECT'],
+    )
 
-maze = MazeGenerator(
-    width=config_data['WIDTH'],
-    height=config_data['HEIGHT'], # Reproducibility daroriya
-    entry=config_data['ENTRY'],
-    exit=config_data['EXIT'],
-    perfect=config_data['PERFECT'],
-)
-
-maze.generate()
-display_visual_maze(maze.grid)
+    maze.generate()
+    path = solve(maze.grid, maze.entry, maze.exit, maze.width, maze.height)
+    display_maze_with_solution(maze.grid, maze.entry, path)
+    print(path)
+except Exception as e:
+    print(e)
