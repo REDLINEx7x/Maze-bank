@@ -31,7 +31,7 @@ def validate_entry_exit(
 
 
 def main() -> None:
-    if sys.argv[1]:
+    if len(sys.argv) < 2:
         CONFIG = parse_config(sys.argv[1])
     else:
         raise FileNotFoundError("please enter a config file")
