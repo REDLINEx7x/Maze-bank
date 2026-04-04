@@ -2,6 +2,8 @@ from typing import Any, Callable, Optional
 import random
 from collections import deque
 from parsing import parse_config
+from maze_solve import solve
+
 NORTH = 1
 EAST  = 2
 SOUTH = 4
@@ -31,20 +33,16 @@ class MazeGenerator:
         self.exit = exit
         self.perfect = perfect
         self.grid: list[list[int]] = []
-        self.solution: list[str] = []
 
     def generate(self):
             #import random
             #random.seed(self.seed)      # we need to add seed in config_file
 
-            self._init_grid()           # 1. all walls closed
+        self._init_grid()           # 1. all walls closed
             #self._create_42_pattern()            # 5. for "42" pattern
-            self._carve()               # 2. carve passages
-            #self._open_borders()        # 3. open entry/exit
+        self._carve()               # 2. carve passages
             #if not self.perfect:
             #    self._add_loops()       # 4. optional: extra paths
-            #self.solution = self._solve() # 6. find the path
-
     def _init_grid(self):
             # Fill every cell with 15 = all walls closed
             self.grid = [
@@ -52,7 +50,7 @@ class MazeGenerator:
             for _ in range(self.height)
         ]
 
-    def _creatr_42_pattern(self, visited: list[list[bool]]):
+    def _create_42_pattern(self, visited: list[list[bool]]):
 
         pattern = [
             "#   ###",
@@ -64,17 +62,22 @@ class MazeGenerator:
         patt_height = len(pattern)
         patt_width = len(pattern[0])
 
-        if(self.height < patt_height + 2 and self.width > patt_width + 2):
+        if(self.height < patt_height + 2 or self.width < patt_width + 2):
              return
 
         start_row = (self.height - patt_height) // 2
         start_col = (self.width - patt_width) // 2
+        entry_cell = (self.entry[1], self.entry[0])
+        exit_cell  = (self.exit[1],  self.exit[0])
 
         for po_r, line in enumerate(pattern):
              for po_c, char in enumerate(line):
                   if char == "#":
-                    r, c = start_row + po_r, start_col + po_c
-                    self.grid[r][c] = 15
+                    r = start_row + po_r
+                    c = start_col + po_c
+                    if (r, c) == entry_cell or (r, c) == exit_cell:
+                        continue
+                    self.grid[r][c] = 0xF
                     visited[r][c] = True
     def _carve(self):
         # Track which cells we've visited
@@ -84,7 +87,7 @@ class MazeGenerator:
         ]
         start_row = self.entry[1]
         start_col = self.entry[0]
-        self._creatr_42_pattern(visited)
+        self._create_42_pattern(visited)
         self._starting_carve(start_row, start_col, visited)
 
     def _starting_carve(self, row: int, col: int, visited: list[list[bool]]) -> None:
