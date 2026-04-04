@@ -28,6 +28,8 @@ maze = [[13, 5, 5, 3, 13, 3, 9, 5, 1, 5, 3, 11, 9, 5, 1, 5, 5, 3, 9, 5, 1, 7, 9,
         [10, 13, 5, 6, 9, 5, 5, 6, 9, 6, 10, 9, 6, 9, 5, 6, 11, 12, 5, 5, 5, 3, 9, 6, 9, 2],
         [12, 5, 5, 5, 4, 5, 5, 5, 6, 13, 6, 12, 5, 4, 5, 5, 4, 5, 5, 5, 7, 12, 4, 5, 6, 14]]
 
+sol = "SWESNSNS"
+
 class MazeRenderer:
     COLORS = {
         "white": "\033[97m",
@@ -43,18 +45,18 @@ class MazeRenderer:
         self.maze = maze
         self.maze_color = 0
         self.logo_color = 0
-        self.animation_delay = 0.0006
+        self.animation_delay = 0.01
         self.corner = "◆"
         self.v_wall = "║"
         self.h_wall = "═══"
         self.block = "███"
         self.space = "   "
+        self.entry = " ◉ "
+        self.exit = " ◎ "
+        self.path = " • "
 
-    def cycle_maze_color(self) -> None:
-        self.maze_color = (self.maze_color + 1) % len(self.COLOR_NAMES)
-
-    def cycle_logo_color(self) -> None:
-        self.logo_color = (self.logo_color + 1) % len(self.COLOR_NAMES)
+    def cycle_color(self, color) -> int:
+        return (color + 1) % len(self.COLOR_NAMES)
 
     def _get_wall_char(self, char: str) -> str:
         color = self.COLORS[self.COLOR_NAMES[self.maze_color]]
@@ -78,8 +80,8 @@ class MazeRenderer:
                 top_line += self._get_wall_char(
                     self.h_wall if (cell & NORTH) else self.space
                 )
-                time.sleep(self.animation_delay)
             top_line += self._get_wall_char(self.corner)
+            time.sleep(self.animation_delay)
             print(top_line)
 
             mid_line = ""
@@ -87,17 +89,20 @@ class MazeRenderer:
                 cell = grid[row][col]
                 mid_line += self._get_wall_char(
                     self.v_wall if (cell & WEST) else " ")
-                mid_line += self._get_logo_char(self.block) if cell == 15 else self.space
-                time.sleep(self.animation_delay)
+                mid_line += (
+                    self._get_logo_char(
+                        self.block) if cell == 15 else self.space
+                )
             mid_line += self._get_wall_char(self.v_wall)
+            time.sleep(self.animation_delay)
             print(mid_line)
 
         bottom = ""
         for col in range(width):
-            cell = grid[height - 1][col]
             bottom += self._get_wall_char(self.corner)
             bottom += self._get_wall_char(self.h_wall)
         bottom += self._get_wall_char(self.corner)
+        time.sleep(self.animation_delay)
         print(bottom)
 
     def check_fits(self, width: int, height: int) -> bool:
@@ -105,6 +110,11 @@ class MazeRenderer:
         needed_cols = width * 4 + 1
         needed_rows = height * 2 + 1
         return needed_cols <= cols and needed_rows <= rows
+    
+    def display_sol(self, sol: str) -> None:
+        for p in sol: #how would I print the path without re rendering the maze, I can't. I must handl the animation dinamically
+            if p == "w":
+                pass
 
 
 def main() -> None:
@@ -114,7 +124,8 @@ def main() -> None:
         print("Terminal too small!")
     else:
         while True:
-            os.system('cls' if os.name == 'nt' else 'clear')
+            exit = 0
+            os.system("cls" if os.name == "nt" else "clear")
             rendering.display_maze(maze)
 
             print("\n=== A-Maze-ing ===")
@@ -124,13 +135,23 @@ def main() -> None:
             print("4. Quit")
             print("5. Cycle 42 color")
 
-            choice = input("Choice? (1-5): ").strip()
-
-            if choice == "3":
-                rendering.cycle_maze_color()
-            elif choice == "5":
-                rendering.cycle_logo_color()
-            elif choice == "4":
+            while True:
+                choice = input("Choice? (1-5): ").strip()
+                if choice == "1":
+                    # implement the logic to call a new maze
+                    break
+                if choice == "3":
+                    rendering.maze_color = rendering.cycle_color(
+                        rendering.maze_color)
+                    break
+                elif choice == "4":
+                    exit = 1
+                    break
+                elif choice == "5":
+                    rendering.logo_color = rendering.cycle_color(
+                        rendering.logo_color)
+                    break
+            if exit == 1:
                 break
 
 
