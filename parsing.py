@@ -1,32 +1,6 @@
 from typing import Any
 
 
-def validate_entry_exit(
-        entry: tuple[int, int],
-        exit: tuple[int, int],
-        maze: list[list[int]]) -> None:
-
-    ex, ey = entry
-    xx, xy = exit
-    height = len(maze)
-    width = len(maze[0])
-
-    if not (0 <= ex < width and 0 <= ey < height):
-        raise ValueError(f"Entry {entry} is outside the maze bounds.")
-
-    if not (0 <= xx < width and 0 <= xy < height):
-        raise ValueError(f"Exit {exit} is outside the maze bounds.")
-
-    if entry == exit:
-        raise ValueError("Entry and exit must be different cells.")
-    
-    if maze[ex][ey] == 15 or maze[xx][xy] == 15:
-        raise ValueError(f"Entry {entry} is inside the 42 block.")
-    
-    if maze[xx][xy] == 15:
-        raise ValueError(f"Exit {exit} is inside the 42 block.")
-
-
 def parse_config(filename: str) -> dict[str, Any]:
     with open(filename) as f:
         config = {}
@@ -61,10 +35,9 @@ def parse_config(filename: str) -> dict[str, Any]:
                     final_config[key] = False
                 else:
                     raise Exception("invalid configuration")
-        # validate_entry_exit(final_config["ENTRY"], final_config["EXIT"], )
-        # got to check for the 42 pattern, which is accessible after maze generation
         return final_config
 
+CONFIG = parse_config("config.txt")
 
 #try:
 #    data = parse_config("config.txt")

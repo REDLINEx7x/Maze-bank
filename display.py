@@ -1,33 +1,8 @@
 import shutil
 import time
 import os
-
-maze = [[13, 5, 5, 3, 13, 3, 9, 5, 1, 5, 3, 11, 9, 5, 1, 5, 5, 3, 9, 5, 1, 7, 9, 5, 1, 3],
-        [9, 5, 7, 12, 3, 10, 10, 11, 10, 13, 2, 10, 12, 3, 12, 5, 3, 14, 10, 11, 12, 5, 4, 7, 10, 10],
-        [12, 3, 9, 3, 10, 12, 4, 6, 12, 3, 10, 10, 9, 4, 5, 3, 12, 5, 6, 8, 3, 11, 9, 5, 6, 10],
-        [9, 6, 10, 10, 12, 3, 9, 5, 5, 6, 10, 12, 6, 9, 3, 10, 13, 1, 5, 6, 8, 6, 10, 13, 5, 2],
-        [10, 9, 6, 12, 3, 10, 10, 13, 5, 3, 12, 5, 5, 6, 10, 12, 5, 6, 9, 7, 10, 9, 6, 9, 3, 14],
-        [10, 12, 5, 3, 10, 12, 6, 9, 3, 8, 5, 5, 1, 7, 12, 3, 11, 9, 2, 9, 6, 12, 3, 10, 12, 3],
-        [8, 5, 5, 6, 12, 1, 5, 6, 12, 6, 13, 5, 6, 9, 5, 6, 8, 6, 12, 4, 5, 3, 12, 6, 9, 6],
-        [10, 13, 3, 9, 5, 2, 9, 5, 5, 3, 9, 5, 3, 12, 3, 13, 6, 9, 5, 3, 9, 6, 9, 7, 12, 3],
-        [12, 5, 2, 10, 13, 6, 10, 13, 3, 12, 6, 9, 4, 3, 12, 5, 5, 6, 11, 10, 12, 5, 6, 9, 3, 10],
-        [11, 9, 6, 12, 5, 3, 12, 3, 8, 7, 9, 6, 9, 4, 5, 5, 5, 3, 10, 10, 9, 5, 5, 6, 12, 2],
-        [8, 6, 9, 3, 9, 4, 7, 10, 10, 15, 8, 3, 14, 15, 15, 15, 11, 12, 2, 10, 8, 3, 9, 1, 7, 10],
-        [10, 9, 6, 10, 12, 5, 5, 6, 10, 15, 14, 12, 1, 5, 7, 15, 10, 9, 6, 10, 10, 10, 14, 12, 3, 10],
-        [10, 12, 3, 12, 5, 5, 1, 3, 10, 15, 15, 15, 10, 15, 15, 15, 8, 4, 7, 10, 10, 10, 9, 5, 6, 10],
-        [10, 13, 0, 5, 5, 7, 10, 12, 4, 5, 3, 15, 10, 15, 13, 5, 4, 3, 9, 6, 10, 10, 12, 5, 5, 6],
-        [12, 3, 14, 9, 3, 9, 6, 9, 7, 9, 6, 15, 10, 15, 15, 15, 13, 6, 12, 3, 14, 10, 9, 5, 5, 3],
-        [11, 10, 9, 6, 12, 6, 11, 8, 3, 12, 5, 3, 12, 5, 1, 7, 9, 5, 5, 6, 9, 6, 8, 5, 7, 10],
-        [10, 12, 6, 9, 5, 5, 2, 10, 12, 5, 3, 10, 13, 3, 12, 3, 12, 3, 9, 7, 8, 5, 6, 9, 3, 10],
-        [10, 9, 5, 6, 9, 5, 6, 10, 9, 3, 10, 12, 3, 10, 9, 6, 9, 6, 12, 3, 10, 9, 5, 6, 12, 2],
-        [8, 6, 13, 3, 12, 5, 5, 6, 10, 14, 8, 7, 12, 2, 10, 9, 6, 9, 3, 12, 2, 10, 9, 5, 7, 10],
-        [10, 9, 3, 8, 5, 3, 13, 5, 4, 3, 12, 5, 5, 6, 10, 10, 9, 6, 12, 3, 10, 10, 12, 1, 5, 6],
-        [10, 10, 12, 6, 9, 6, 9, 5, 3, 8, 1, 5, 3, 9, 2, 12, 6, 9, 7, 10, 10, 12, 3, 10, 13, 3],
-        [12, 6, 13, 3, 12, 5, 6, 9, 6, 14, 12, 3, 14, 10, 8, 5, 5, 6, 9, 6, 12, 7, 10, 12, 3, 10],
-        [9, 5, 5, 0, 5, 5, 7, 10, 13, 1, 1, 6, 9, 6, 14, 9, 5, 3, 12, 5, 5, 5, 6, 9, 6, 10],
-        [10, 13, 5, 6, 9, 5, 5, 6, 9, 6, 10, 9, 6, 9, 5, 6, 11, 12, 5, 5, 5, 3, 9, 6, 9, 2],
-        [12, 5, 5, 5, 4, 5, 5, 5, 6, 13, 6, 12, 5, 4, 5, 5, 4, 5, 5, 5, 7, 12, 4, 5, 6, 14]]
-
+from parsing import CONFIG
+from maze_gen import MazeGenerator
 
 
 class MazeRenderer:
@@ -66,7 +41,7 @@ class MazeRenderer:
         color = self.COLORS[self.COLOR_NAMES[self.logo_color]]
         return f"{color}{char}{self.COLORS['reset']}"
 
-    def display_maze(self, grid: list[list[int]]) -> None:
+    def display_maze(self, grid: list[list[int]], animate: bool) -> None:
         height = len(grid)
         width = len(grid[0])
         NORTH = 1
@@ -81,7 +56,8 @@ class MazeRenderer:
                     self.h_wall if (cell & NORTH) else self.space
                 )
             top_line += self._get_wall_char(self.corner)
-            time.sleep(self.animation_delay)
+            if animate is True:
+                time.sleep(self.animation_delay)
             print(top_line)
 
             mid_line = ""
@@ -94,7 +70,8 @@ class MazeRenderer:
                         self.block) if cell == 15 else self.space
                 )
             mid_line += self._get_wall_char(self.v_wall)
-            time.sleep(self.animation_delay)
+            if animate is True:
+                time.sleep(self.animation_delay)
             print(mid_line)
 
         bottom = ""
@@ -102,7 +79,8 @@ class MazeRenderer:
             bottom += self._get_wall_char(self.corner)
             bottom += self._get_wall_char(self.h_wall)
         bottom += self._get_wall_char(self.corner)
-        time.sleep(self.animation_delay)
+        if animate is True:
+            time.sleep(self.animation_delay)
         print(bottom)
 
     def check_fits(self, width: int, height: int) -> bool:
@@ -112,17 +90,53 @@ class MazeRenderer:
         return needed_cols <= cols and needed_rows <= rows
 
 
-def main() -> None:
-    rendering = MazeRenderer(maze)
+def validate_entry_exit(
+        entry: tuple[int, int],
+        exit: tuple[int, int],
+        maze: list[list[int]]) -> None:
 
-    if not rendering.check_fits(len(maze), len(maze[0])):
+    ex, ey = entry
+    xx, xy = exit
+    height = len(maze)
+    width = len(maze[0])
+
+    if not (0 <= ex < width and 0 <= ey < height):
+        raise ValueError(f"Entry {entry} is outside the maze bounds.")
+
+    if not (0 <= xx < width and 0 <= xy < height):
+        raise ValueError(f"Exit {exit} is outside the maze bounds.")
+
+    if entry == exit:
+        raise ValueError("Entry and exit must be different cells.")
+    
+    if maze[ex][ey] == 15 or maze[xx][xy] == 15:
+        raise ValueError(f"Entry {entry} is inside the 42 block.")
+    
+    if maze[xx][xy] == 15:
+        raise ValueError(f"Exit {exit} is inside the 42 block.")
+
+
+def main() -> None:
+    maze_c = MazeGenerator(
+        CONFIG["WIDTH"],
+        CONFIG["HEIGHT"],
+        CONFIG["ENTRY"],
+        CONFIG["EXIT"],
+        CONFIG["PERFECT"])
+    maze_c.generate()
+    maze = maze_c.grid
+    validate_entry_exit(CONFIG["ENTRY"], CONFIG["EXIT"], maze)
+    render = MazeRenderer(maze)
+    regenerate = True
+
+    if not render.check_fits(len(maze), len(maze[0])):
         print("Terminal too small!")
     else:
         while True:
             exit = 0
             os.system("cls" if os.name == "nt" else "clear")
-            rendering.display_maze(maze)
-
+            render.display_maze(maze, regenerate)
+            regenerate = False
             print("\n=== A-Maze-ing ===")
             print("1. Re-generate a new maze")
             print("2. Show/Hide path from entry to exit")
@@ -133,18 +147,20 @@ def main() -> None:
             while True:
                 choice = input("Choice? (1-5): ").strip()
                 if choice == "1":
-                    # implement the logic to call a new maze
+                    maze_c.generate()
+                    maze = maze_c.grid
+                    regenerate = True
                     break
                 if choice == "3":
-                    rendering.maze_color = rendering.cycle_color(
-                        rendering.maze_color)
+                    render.maze_color = render.cycle_color(
+                        render.maze_color)
                     break
                 elif choice == "4":
                     exit = 1
                     break
                 elif choice == "5":
-                    rendering.logo_color = rendering.cycle_color(
-                        rendering.logo_color)
+                    render.logo_color = render.cycle_color(
+                        render.logo_color)
                     break
             if exit == 1:
                 break
