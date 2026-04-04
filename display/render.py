@@ -28,7 +28,7 @@ maze = [[13, 5, 5, 3, 13, 3, 9, 5, 1, 5, 3, 11, 9, 5, 1, 5, 5, 3, 9, 5, 1, 7, 9,
         [10, 13, 5, 6, 9, 5, 5, 6, 9, 6, 10, 9, 6, 9, 5, 6, 11, 12, 5, 5, 5, 3, 9, 6, 9, 2],
         [12, 5, 5, 5, 4, 5, 5, 5, 6, 13, 6, 12, 5, 4, 5, 5, 4, 5, 5, 5, 7, 12, 4, 5, 6, 14]]
 
-sol = "SWESNSNS"
+
 
 class MazeRenderer:
     COLORS = {
@@ -110,11 +110,6 @@ class MazeRenderer:
         needed_cols = width * 4 + 1
         needed_rows = height * 2 + 1
         return needed_cols <= cols and needed_rows <= rows
-    
-    def display_sol(self, sol: str) -> None:
-        for p in sol: #how would I print the path without re rendering the maze, I can't. I must handl the animation dinamically
-            if p == "w":
-                pass
 
 
 def main() -> None:
