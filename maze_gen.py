@@ -117,17 +117,56 @@ class MazeGenerator:
             # Recurse into the neighbor
             self._starting_carve(new_row, new_col, visited)
 
+def display_maze_with_solution(grid: list[list[int]], entry: tuple[int, int], path: list[str]) -> None:
+    height = len(grid)
+    width = len(grid[0])
 
-config_data = parse_config("config.txt")
+    solution_cells = set()
+    curr_r, curr_c = entry[1], entry[0]
+    solution_cells.add((curr_r, curr_c))
 
-maze = MazeGenerator(
-    width=config_data['WIDTH'],
-    height=config_data['HEIGHT'], # Reproducibility daroriya
-    entry=config_data['ENTRY'],
-    exit=config_data['EXIT'],
-    perfect=config_data['PERFECT'],
-)
+    for move in path:
+        if move == 'N': curr_r -= 1
+        elif move == 'S': curr_r += 1
+        elif move == 'E': curr_c += 1
+        elif move == 'W': curr_c -= 1
+        solution_cells.add((curr_r, curr_c))
 
-# maze.generate()
+    # 2. R-Resm
+    print("+" + "---+" * width)
 
-# print(maze.grid)
+    for r, row in enumerate(grid):
+        line = "|"
+        for c, cell in enumerate(row):
+            char = " . " if (r, c) in solution_cells else "   "
+
+            if cell & 2:
+                line += char + "|"
+            else:
+                line += char + " "
+        print(line)
+
+        bottom = "+"
+        for c, cell in enumerate(row):
+            if cell & 4:
+                bottom += "---+"
+            else:
+                bottom += "   +"
+        print(bottom)
+try:
+    config_data = parse_config("config.txt")
+
+    maze = MazeGenerator(
+        width=config_data['WIDTH'],
+        height=config_data['HEIGHT'], # Reproducibility daroriya
+        entry=config_data['ENTRY'],
+        exit=config_data['EXIT'],
+        perfect=config_data['PERFECT'],
+    )
+
+    maze.generate()
+    path = solve(maze.grid, maze.entry, maze.exit, maze.width, maze.height)
+    display_maze_with_solution(maze.grid, maze.entry, path)
+    print(path)
+except Exception as e:
+    print(e)
