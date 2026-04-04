@@ -41,7 +41,22 @@ class MazeRenderer:
         color = self.COLORS[self.COLOR_NAMES[self.logo_color]]
         return f"{color}{char}{self.COLORS['reset']}"
 
-    def display_maze(self, grid: list[list[int]], animate: bool) -> None:
+    def _path_to_coords(self, path: list[str], start: tuple[int, int]) -> list[tuple[int, int]]:
+        DIRECTION_MAP = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
+        coords = [start]
+        row, col = start
+        for step in path:
+            dr, dc = DIRECTION_MAP[step]
+            row, col = row + dr, col + dc
+            coords.append((row, col))
+        return coords
+
+    def display_maze(
+            self,
+            grid: list[list[int]],
+            animate: bool,
+            ) -> None:
+        
         height = len(grid)
         width = len(grid[0])
         NORTH = 1
