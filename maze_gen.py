@@ -125,6 +125,6 @@ maze = MazeGenerator(
     perfect=config_data['PERFECT'],
 )
 
-maze.generate()
+# maze.generate()
 
-print(maze.grid)
+# print(maze.grid)

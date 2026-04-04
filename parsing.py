@@ -37,7 +37,6 @@ def parse_config(filename: str) -> dict[str, Any]:
                     raise Exception("invalid configuration")
         return final_config
 
-CONFIG = parse_config("config.txt")
 
 #try:
 #    data = parse_config("config.txt")
