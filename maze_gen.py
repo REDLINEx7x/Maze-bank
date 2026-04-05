@@ -24,20 +24,21 @@ class MazeGenerator:
         height: int,
         entry: tuple[int, int],
         exit: tuple[int, int],
-        #seed: Optional[int] = None,
+        seed: Optional[int] = None,
         perfect: bool = True,
     ) -> None:
+
         self.width = width
         self.height = height
         self.entry = entry   # (col, row) = (x, y)
         self.exit = exit
         self.perfect = perfect
+        self.seed = seed
         self.grid: list[list[int]] = []
 
     def generate(self):
-            #import random
-            #random.seed(self.seed)      # we need to add seed in config_file
 
+        random.seed(self.seed)      # we need to add seed in config_file
         self._init_grid()           # 1. all walls closed         # 5. for "42" pattern
         self._carve()               # 2. carve passages
         if not self.perfect:
@@ -189,56 +190,57 @@ class MazeGenerator:
                     return True
         return False
 
-def display_maze_with_solution(grid: list[list[int]], entry: tuple[int, int], path: list[str]) -> None:
-    height = len(grid)
-    width = len(grid[0])
+#def display_maze_with_solution(grid: list[list[int]], entry: tuple[int, int], path: list[str]) -> None:
+#    height = len(grid)
+#    width = len(grid[0])
 
-    solution_cells = set()
-    curr_r, curr_c = entry[1], entry[0]
-    solution_cells.add((curr_r, curr_c))
+#    solution_cells = set()
+#    curr_r, curr_c = entry[1], entry[0]
+#    solution_cells.add((curr_r, curr_c))
 
-    for move in path:
-        if move == 'N': curr_r -= 1
-        elif move == 'S': curr_r += 1
-        elif move == 'E': curr_c += 1
-        elif move == 'W': curr_c -= 1
-        solution_cells.add((curr_r, curr_c))
+#    for move in path:
+#        if move == 'N': curr_r -= 1
+#        elif move == 'S': curr_r += 1
+#        elif move == 'E': curr_c += 1
+#        elif move == 'W': curr_c -= 1
+#        solution_cells.add((curr_r, curr_c))
 
-    # 2. R-Resm
-    print("+" + "---+" * width)
+#    # 2. R-Resm
+#    print("+" + "---+" * width)
 
-    for r, row in enumerate(grid):
-        line = "|"
-        for c, cell in enumerate(row):
-            char = " . " if (r, c) in solution_cells else "   "
+#    for r, row in enumerate(grid):
+#        line = "|"
+#        for c, cell in enumerate(row):
+#            char = " . " if (r, c) in solution_cells else "   "
 
-            if cell & 2:
-                line += char + "|"
-            else:
-                line += char + " "
-        print(line)
+#            if cell & 2:
+#                line += char + "|"
+#            else:
+#                line += char + " "
+#        print(line)
 
-        bottom = "+"
-        for c, cell in enumerate(row):
-            if cell & 4:
-                bottom += "---+"
-            else:
-                bottom += "   +"
-        print(bottom)
-try:
-    config_data = parse_config("config.txt")
+#        bottom = "+"
+#        for c, cell in enumerate(row):
+#            if cell & 4:
+#                bottom += "---+"
+#            else:
+#                bottom += "   +"
+#        print(bottom)
+#try:
+#    config_data = parse_config("config.txt")
 
-    maze = MazeGenerator(
-        width=config_data['WIDTH'],
-        height=config_data['HEIGHT'], # Reproducibility daroriya
-        entry=config_data['ENTRY'],
-        exit=config_data['EXIT'],
-        perfect=config_data['PERFECT'],
-    )
+#    maze = MazeGenerator(
+#        width=config_data['WIDTH'],
+#        height=config_data['HEIGHT'], # Reproducibility daroriya
+#        entry=config_data['ENTRY'],
+#        exit=config_data['EXIT'],
+#        perfect=config_data['PERFECT'],
+#        seed=config_data['SEED'],
+#    )
 
-    maze.generate()
-    path = solve(maze.grid, maze.entry, maze.exit, maze.width, maze.height)
-    display_maze_with_solution(maze.grid, maze.entry, path)
-    print(path)
-except Exception as e:
-    print(e)
+#    maze.generate()
+#    path = solve(maze.grid, maze.entry, maze.exit, maze.width, maze.height)
+#    display_maze_with_solution(maze.grid, maze.entry, path)
+#    print(path)
+#except Exception as e:
+#    print(e)

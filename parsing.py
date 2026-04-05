@@ -1,7 +1,8 @@
 from typing import Any
-
+from utilis import get_42_cells
 
 def parse_config(filename: str) -> dict[str, Any]:
+
     with open(filename) as f:
         config = {}
         final_config: dict[str, Any] = {}
@@ -35,13 +36,20 @@ def parse_config(filename: str) -> dict[str, Any]:
                     final_config[key] = False
                 else:
                     raise Exception("invalid configuration")
+            elif key == "SEED":
+                try:
+                    final_config[key] = int(config[key])
+                except ValueError:
+                    raise Exception("SEED must be an integer.")
+        if "SEED" not in final_config:
+            final_config["SEED"] = None
 
         width  = final_config["WIDTH"]
         height = final_config["HEIGHT"]
         entry  = final_config["ENTRY"]
-        exit_  = final_config["EXIT"]
+        exit  = final_config["EXIT"]
         ex, ey = entry
-        xx, xy = exit_
+        xx, xy = exit
 
         if not (0 <= ex < width and 0 <= ey < height):
             raise Exception(
@@ -50,11 +58,19 @@ def parse_config(filename: str) -> dict[str, Any]:
 
         if not (0 <= xx < width and 0 <= xy < height):
             raise Exception(
-                f"EXIT {exit_} is outside maze bounds ({width}x{height})."
+                f"EXIT {exit} is outside maze bounds ({width}x{height})."
             )
 
-        if entry == exit_:
+        if entry == exit:
             raise Exception("ENTRY and EXIT must be different cells.")
+
+        pattern_cells = get_42_cells(width, height)
+        entry_cell = (ey, ex)
+        exit_cell = (xy, xx)
+        if entry_cell in pattern_cells:
+            raise ValueError(f"Entry {entry} overlaps with the '42' pattern.")
+        if exit_cell in pattern_cells:
+            raise ValueError(f"Exit {exit} overlaps with the '42' pattern.")
 
         return final_config
 
