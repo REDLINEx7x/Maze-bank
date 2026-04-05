@@ -38,13 +38,11 @@ class MazeGenerator:
             #import random
             #random.seed(self.seed)      # we need to add seed in config_file
 
-        self._init_grid()           # 1. all walls closed
-            #self._create_42_pattern()            # 5. for "42" pattern
+        self._init_grid()           # 1. all walls closed         # 5. for "42" pattern
         self._carve()               # 2. carve passages
-            #if not self.perfect:
-            #    self._add_loops()       # 4. optional: extra paths
+        if not self.perfect:
+            self._add_extra_paths()       # 4. optional: extra paths
     def _init_grid(self):
-            # Fill every cell with 15 = all walls closed
             self.grid = [
             [15 for _ in range (self.width)]
             for _ in range(self.height)
@@ -113,9 +111,83 @@ class MazeGenerator:
             # Remove wall on BOTH sides
             self.grid[row][col]           &= ~direction
             self.grid[new_row][new_col]   &= ~opposite
-
-            # Recurse into the neighbor
             self._starting_carve(new_row, new_col, visited)
+
+    def _add_extra_paths(self):
+
+        total_cells = self.height * self.width
+        nedded_walls = total_cells // 10
+        removed = 0
+        tries  = 0
+        while removed < nedded_walls and tries < 1000:
+            tries += 1
+            row = random.randint(0, self.height - 2)
+            col = random.randint(0, self.width - 2)
+            to_east = random.choice([True, False])
+            if to_east:
+                if self.grid[row][col] == 15:
+                    continue
+                if self.grid[row][col + 1] == 15:
+                    continue
+                if self.grid[row][col] & EAST:
+                    self.grid[row][col] &= ~EAST
+                    self.grid[row][col + 1] &= ~WEST
+                    if self._has_3x3_open(row, col):
+                        self.grid[row][col] |= EAST
+                        self.grid[row][col + 1] |= WEST
+                        continue
+                    removed += 1
+                else:
+                    continue
+
+            else:
+                if self.grid[row][col] == 15:
+                    continue
+                if self.grid[row + 1][col] == 15:
+                    continue
+                if self.grid[row][col] & SOUTH:
+                    self.grid[row][col] &= ~SOUTH
+                    self.grid[row + 1][col] &= ~NORTH
+                    if self._has_3x3_open(row, col):
+                        self.grid[row][col] |= SOUTH
+                        self.grid[row + 1][col] |= NORTH
+                        continue
+
+                    removed += 1
+                else:
+                    continue
+
+
+    def _has_3x3_open(self, row: int, col: int) -> bool:
+
+        for r in range(row - 2, row + 2):
+            for c in range(col - 2, col + 2):
+                # bounds check — is this 3x3 block inside the grid?
+                if r < 0 or c < 0:
+                    continue
+                if r + 2 >= self.height or c + 2 >= self.width:
+                    continue
+                # check all internal walls of this 3x3 block
+                all_open = True
+                for dr in range(3):
+                    for dc in range(3):
+                        cr = r + dr
+                        cc = c + dc
+                        # check East wall (not last column of block)
+                        if dc < 2:
+                            if self.grid[cr][cc] & EAST:
+                                all_open = False
+                                break
+                        # check South wall (not last row of block)
+                        if dr < 2:
+                            if self.grid[cr][cc] & SOUTH:
+                                all_open = False
+                                break
+                    if not all_open:
+                        break
+                if all_open:
+                    return True
+        return False
 
 def display_maze_with_solution(grid: list[list[int]], entry: tuple[int, int], path: list[str]) -> None:
     height = len(grid)

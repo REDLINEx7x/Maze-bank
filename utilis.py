@@ -1,4 +1,3 @@
-
 def get_42_cells(width: int, height: int) -> set[tuple[int, int]]:
 
     pattern = [
