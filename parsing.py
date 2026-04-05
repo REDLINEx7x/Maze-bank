@@ -7,6 +7,7 @@ def parse_config(filename: str) -> dict[str, Any]:
         config = {}
         final_config: dict[str, Any] = {}
         keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
+
         for line in f:
             clean_line = line.strip()
             if clean_line == "" or clean_line[0] == "#":
@@ -17,9 +18,11 @@ def parse_config(filename: str) -> dict[str, Any]:
             if len(parts) != 2:
                 raise Exception("invalid configuration")
             config[parts[0].strip().upper()] = parts[1].strip()
+
         for key in keys:
             if key not in config:
                 raise Exception(f"missing key {key}")
+
         for key in config:
             if key == "WIDTH" or key == "HEIGHT":
                 final_config[key] = int(config[key])
