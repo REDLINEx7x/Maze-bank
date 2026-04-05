@@ -2,9 +2,8 @@ import shutil
 import time
 import sys
 from parsing import parse_config
+from maze_gen import MazeGenerator
 
-
-SOL = ['S', 'E', 'N', 'E', 'E','E', ]
 CONFIG = parse_config(sys.argv[1])
 
 
@@ -18,11 +17,11 @@ class MazeRenderer:
         "reset": "\033[0m",
     }
     COLOR_NAMES = list(COLORS.keys())[:-1]
-
     def __init__(self, maze: list[list[int]]) -> None:
         self.maze = maze
         self.maze_color = 0
         self.logo_color = 0
+        self.sol_color = 2
         self.animation_delay = 0.01
         self.corner = "◆"
         self.v_wall = "║"
@@ -32,10 +31,13 @@ class MazeRenderer:
         self.entry = " ◉ "
         self.exit = " ◎ "
         self.path = " • "
-        self.solution = self._path_to_coords(SOL, CONFIG["ENTRY"])
 
     def cycle_color(self, color) -> int:
         return (color + 1) % len(self.COLOR_NAMES)
+    
+    def _get_sol_char(self, char: str) -> str:
+        color = self.COLORS[self.COLOR_NAMES[self.sol_color]]
+        return f"{color}{char}{self.COLORS['reset']}"
 
     def _get_wall_char(self, char: str) -> str:
         color = self.COLORS[self.COLOR_NAMES[self.maze_color]]
@@ -62,14 +64,15 @@ class MazeRenderer:
             self,
             grid: list[list[int]],
             animate: bool,
-            display_solution: bool
+            display_solution: bool,
+            sol: list[str]
             ) -> None:
 
         height = len(grid)
         width = len(grid[0])
         NORTH = 1
         WEST = 8
-
+        solution = self._path_to_coords(sol, CONFIG["ENTRY"])
         for row in range(height):
             top_line = ""
             for col in range(width):
@@ -88,15 +91,15 @@ class MazeRenderer:
                 cell = grid[row][col]
                 mid_line += self._get_wall_char(
                     self.v_wall if (cell & WEST) else " ")
-                if tuple([row, col]) == CONFIG["ENTRY"]:
+                if tuple([col, row]) == CONFIG["ENTRY"]:
                     mid_line += self.entry
                     continue
-                if tuple([row, col]) == CONFIG["EXIT"]:
+                if tuple([col, row]) == CONFIG["EXIT"]:
                     mid_line += self.exit
                     continue
                 if display_solution is True:
-                    if tuple([row, col]) in self.solution:
-                        mid_line += self.path
+                    if tuple([row, col]) in solution:
+                        mid_line += self._get_sol_char(self.path)
                         continue
                 mid_line += (
                     self._get_logo_char(

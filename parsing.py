@@ -70,10 +70,11 @@ def parse_config(filename: str) -> dict[str, Any]:
         pattern_cells = get_42_cells(width, height)
         entry_cell = (ey, ex)
         exit_cell = (xy, xx)
-        if entry_cell in pattern_cells:
-            raise ValueError(f"Entry {entry} overlaps with the '42' pattern.")
-        if exit_cell in pattern_cells:
-            raise ValueError(f"Exit {exit} overlaps with the '42' pattern.")
+        for cell in pattern_cells:
+            if entry_cell == cell:
+                raise ValueError(f"Entry {entry} overlaps with the '42' pattern.")
+            if exit_cell == cell:
+                raise ValueError(f"Exit {exit} overlaps with the '42' pattern.")
 
         return final_config
 

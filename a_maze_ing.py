@@ -31,12 +31,13 @@ def validate_entry_exit(
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
+    if len(sys.argv) == 2:
         CONFIG = parse_config(sys.argv[1])
     else:
         raise FileNotFoundError("please enter a config file")
 
     from display import MazeRenderer
+    from maze_solve import solve
     maze_c = MazeGenerator(
         CONFIG["WIDTH"],
         CONFIG["HEIGHT"],
@@ -46,17 +47,17 @@ def main() -> None:
     maze_c.generate()
     maze = maze_c.grid
     validate_entry_exit(CONFIG["ENTRY"], CONFIG["EXIT"], maze)
-    render = MazeRenderer(maze)
     regenerate = True
     display_solution = False
-
+    render = MazeRenderer(maze)
     if not render.check_fits(len(maze), len(maze[0])):
         print("Terminal too small!")
     else:
         while True:
             exit = 0
             os.system("cls" if os.name == "nt" else "clear")
-            render.display_maze(maze, regenerate, display_solution)
+            sol = solve(maze_c.grid, maze_c.entry, maze_c.exit, maze_c.width, maze_c.height)
+            render.display_maze(maze, regenerate, display_solution, sol)
             regenerate = False
             print("\n=== A-Maze-ing ===")
             print("1. Re-generate a new maze")
