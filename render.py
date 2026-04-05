@@ -122,3 +122,10 @@ class MazeRenderer:
         needed_cols = width * 4 + 1
         needed_rows = height * 2 + 1
         return needed_cols <= cols and needed_rows <= rows
+
+
+    # def check_fits(self, width: int, height: int) -> bool:
+    #     cols, rows = shutil.get_terminal_size()
+    #     needed_cols = width * 4 + 1
+    #     needed_rows = height * 2 + 1
+    #     return needed_cols <= cols and needed_rows <= rows
