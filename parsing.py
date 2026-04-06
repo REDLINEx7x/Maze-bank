@@ -1,6 +1,7 @@
 from typing import Any
 from utilis import get_42_cells
 
+
 def parse_config(filename: str) -> dict[str, Any]:
 
     with open(filename) as f:
@@ -47,10 +48,10 @@ def parse_config(filename: str) -> dict[str, Any]:
         if "SEED" not in final_config:
             final_config["SEED"] = None
 
-        width  = final_config["WIDTH"]
+        width = final_config["WIDTH"]
         height = final_config["HEIGHT"]
-        entry  = final_config["ENTRY"]
-        exit  = final_config["EXIT"]
+        entry = final_config["ENTRY"]
+        exit = final_config["EXIT"]
         ex, ey = entry
         xx, xy = exit
 
@@ -72,19 +73,10 @@ def parse_config(filename: str) -> dict[str, Any]:
         exit_cell = (xy, xx)
         for cell in pattern_cells:
             if entry_cell == cell:
-                raise ValueError(f"Entry {entry} overlaps with the '42' pattern.")
+                raise ValueError(f"Entry {entry} "
+                                 f"overlaps with the '42' pattern.")
             if exit_cell == cell:
-                raise ValueError(f"Exit {exit} overlaps with the '42' pattern.")
+                raise ValueError(f"Exit {exit} "
+                                 f"overlaps with the '42' pattern.")
 
         return final_config
-
-
-#try:
-#    data = parse_config("config.txt")
-#    print(data)
-#except FileNotFoundError as e:
-#    print(e)
-#except ValueError as e:
-#    print("Error: invalid configuration")
-#except Exception as e:
-#    print(e)
