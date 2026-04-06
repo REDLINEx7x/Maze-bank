@@ -32,6 +32,7 @@ def validate_entry_exit(
 
 
 def main() -> None:
+
     if len(sys.argv) >= 2:
         CONFIG = parse_config(sys.argv[1])
     else:
@@ -49,8 +50,13 @@ def main() -> None:
     maze = maze_c.grid
     validate_entry_exit(CONFIG["ENTRY"], CONFIG["EXIT"], maze)
     regenerate = True
+
     display_solution = False
     render = MazeRenderer(maze)
+
+    display_solution = True
+
+
     if not render.check_fits(len(maze), len(maze[0])):
         print("Terminal too small!")
     else:
