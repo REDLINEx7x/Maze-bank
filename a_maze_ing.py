@@ -1,5 +1,6 @@
 from maze_gen import MazeGenerator
 from parsing import parse_config
+from output import generate_output
 import os
 import sys
 
@@ -56,8 +57,10 @@ def main() -> None:
         while True:
             exit = 0
             os.system("cls" if os.name == "nt" else "clear")
-            sol = solve(maze_c.grid, maze_c.entry, maze_c.exit, maze_c.width, maze_c.height)
+            sol = solve(maze_c.grid, maze_c.entry,
+                        maze_c.exit, maze_c.width, maze_c.height)
             render.display_maze(maze, regenerate, display_solution, sol)
+            generate_output(maze, CONFIG["ENTRY"], CONFIG["EXIT"], sol)
             regenerate = False
             print("\n=== A-Maze-ing ===")
             print("1. Re-generate a new maze")
