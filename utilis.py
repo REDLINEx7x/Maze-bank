@@ -25,4 +25,3 @@ def get_42_cells(width: int, height: int) -> set[tuple[int, int]]:
                 c = start_col + p_col
                 cells.add((r, c))
     return cells
-

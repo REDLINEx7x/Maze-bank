@@ -1,4 +1,5 @@
-from maze_gen import MazeGenerator
+from mazegen.maze_gen import MazeGenerator
+from mazegen.maze_solve import solve
 from parsing import parse_config
 from output import generate_output
 import os
@@ -39,18 +40,19 @@ def main() -> None:
         raise FileNotFoundError("please enter a config file")
 
     from display import MazeRenderer
-    from maze_solve import solve
+    #from mazege.maze_solve import solve
     maze_c = MazeGenerator(
         CONFIG["WIDTH"],
         CONFIG["HEIGHT"],
         CONFIG["ENTRY"],
         CONFIG["EXIT"],
-        CONFIG["PERFECT"])
+        CONFIG["SEED"],
+        CONFIG["PERFECT"]
+        )
     maze_c.generate()
     maze = maze_c.grid
     validate_entry_exit(CONFIG["ENTRY"], CONFIG["EXIT"], maze)
     regenerate = True
-
     display_solution = False
     render = MazeRenderer(maze)
 
