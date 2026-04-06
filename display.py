@@ -6,7 +6,6 @@ from maze_gen import MazeGenerator
 
 CONFIG = parse_config(sys.argv[1])
 
-
 class MazeRenderer:
     COLORS = {
         "white": "\033[97m",
