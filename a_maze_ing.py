@@ -76,11 +76,11 @@ def main() -> None:
                     maze = maze_c.grid
                     regenerate = True
                     break
-                if choice == "2":
+                elif choice == "2":
                     display_solution = (True if display_solution
                                         is False else False)
                     break
-                if choice == "3":
+                elif choice == "3":
                     render.maze_color = render.cycle_color(
                         render.maze_color)
                     break
