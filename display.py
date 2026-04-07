@@ -3,7 +3,6 @@ import time
 import sys
 from parsing import parse_config
 
-
 CONFIG = parse_config(sys.argv[1])
 
 
@@ -42,10 +41,9 @@ class MazeRenderer:
         color = self.COLORS[self.COLOR_NAMES[color_index]]
         return f"{color}{char}{self.COLORS['reset']}"
 
-    def _path_to_coords(self,
-                        path: list[str],
-                        start: tuple[int, int]
-                        ) -> list[tuple[int, int]]:
+    def _path_to_coords(
+        self, path: list[str], start: tuple[int, int]
+    ) -> list[tuple[int, int]]:
         DIRECTION_MAP = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
         col, row = start
         coords = []
@@ -57,12 +55,12 @@ class MazeRenderer:
         return coords
 
     def display_maze(
-            self,
-            grid: list[list[int]],
-            animate: bool,
-            display_solution: bool,
-            sol: list[str]
-            ) -> None:
+        self,
+        grid: list[list[int]],
+        animate: bool,
+        display_solution: bool,
+        sol: list[str],
+    ) -> None:
 
         height = len(grid)
         width = len(grid[0])
@@ -74,10 +72,10 @@ class MazeRenderer:
             for col in range(width):
                 cell = grid[row][col]
                 top_line += self._get_char(self.corner, self.maze_color)
-                top_line += self._get_char(
-                    self.h_wall if (cell & NORTH) else self.space,
-                    self.maze_color
+                wall_char = (
+                    self.h_wall if (cell & NORTH) else self.space
                 )
+                top_line += self._get_char(wall_char, self.maze_color)
             top_line += self._get_char(self.corner, self.maze_color)
             if animate is True:
                 time.sleep(self.animation_delay)
@@ -87,7 +85,8 @@ class MazeRenderer:
             for col in range(width):
                 cell = grid[row][col]
                 mid_line += self._get_char(
-                    self.v_wall if (cell & WEST) else " ", self.maze_color)
+                    self.v_wall if (cell & WEST) else " ", self.maze_color
+                )
                 if tuple([col, row]) == CONFIG["ENTRY"]:
                     mid_line += self._get_char(self.entry, self.entry_color)
                     continue
@@ -99,8 +98,9 @@ class MazeRenderer:
                         mid_line += self._get_char(self.path, self.sol_color)
                         continue
                 mid_line += (
-                    self._get_char(
-                        self.block, self.logo_color) if cell == 15 else self.space
+                    self._get_char(self.block, self.logo_color)
+                    if cell == 15
+                    else self.space
                 )
             mid_line += self._get_char(self.v_wall, self.maze_color)
             if animate is True:

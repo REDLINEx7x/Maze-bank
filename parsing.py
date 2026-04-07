@@ -73,10 +73,12 @@ def parse_config(filename: str) -> dict[str, Any]:
         exit_cell = (xy, xx)
         for cell in pattern_cells:
             if entry_cell == cell:
-                raise ValueError(f"Entry {entry} "
-                                 f"overlaps with the '42' pattern.")
+                raise ValueError(
+                    f"Entry {entry} overlaps with the '42' pattern."
+                )
             if exit_cell == cell:
-                raise ValueError(f"Exit {exit} "
-                                 f"overlaps with the '42' pattern.")
+                raise ValueError(
+                    f"Exit {exit} overlaps with the '42' pattern."
+                )
 
         return final_config

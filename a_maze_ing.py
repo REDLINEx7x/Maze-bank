@@ -1,5 +1,4 @@
 from mazegen.maze_gen import MazeGenerator
-from mazegen.maze_solve import solve
 from parsing import parse_config
 from output import generate_output
 import os
@@ -7,9 +6,8 @@ import sys
 
 
 def validate_entry_exit(
-        entry: tuple[int, int],
-        exit: tuple[int, int],
-        maze: list[list[int]]) -> None:
+    entry: tuple[int, int], exit: tuple[int, int], maze: list[list[int]]
+) -> None:
 
     ex, ey = entry
     xx, xy = exit
@@ -41,14 +39,15 @@ def main() -> None:
 
     from display import MazeRenderer
     from mazegen.maze_solve import solve
+
     maze_c = MazeGenerator(
         CONFIG["WIDTH"],
         CONFIG["HEIGHT"],
         CONFIG["ENTRY"],
         CONFIG["EXIT"],
         CONFIG["SEED"],
-        CONFIG["PERFECT"]
-        )
+        CONFIG["PERFECT"],
+    )
     maze_c.generate()
     maze = maze_c.grid
     validate_entry_exit(CONFIG["ENTRY"], CONFIG["EXIT"], maze)
@@ -57,15 +56,19 @@ def main() -> None:
     render = MazeRenderer(maze)
     display_solution = True
 
-
     if not render.check_fits(len(maze), len(maze[0])):
         print("Terminal too small!")
     else:
         while True:
             exit = 0
             os.system("cls" if os.name == "nt" else "clear")
-            sol = solve(maze_c.grid, maze_c.entry,
-                        maze_c.exit, maze_c.width, maze_c.height)
+            sol = solve(
+                maze_c.grid,
+                maze_c.entry,
+                maze_c.exit,
+                maze_c.width,
+                maze_c.height,
+            )
             render.display_maze(maze, regenerate, display_solution, sol)
             generate_output(maze, CONFIG["ENTRY"], CONFIG["EXIT"], sol)
             regenerate = False
@@ -84,19 +87,16 @@ def main() -> None:
                     regenerate = True
                     break
                 if choice == "2":
-                    display_solution = (True if display_solution
-                                        is False else False)
+                    display_solution = not display_solution
                     break
                 if choice == "3":
-                    render.maze_color = render.cycle_color(
-                        render.maze_color)
+                    render.maze_color = render.cycle_color(render.maze_color)
                     break
                 elif choice == "4":
                     exit = 1
                     break
                 elif choice == "5":
-                    render.logo_color = render.cycle_color(
-                        render.logo_color)
+                    render.logo_color = render.cycle_color(render.logo_color)
                     break
             if exit == 1:
                 break

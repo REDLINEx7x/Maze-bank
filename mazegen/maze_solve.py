@@ -1,16 +1,15 @@
 from collections import deque
 
-
 NORTH = 1
-EAST  = 2
+EAST = 2
 SOUTH = 4
-WEST  = 8
+WEST = 8
 
 DIRECTIONS = {
-    NORTH: (-1,  0, 'N'),
-    EAST:  ( 0, +1, 'E'),
-    SOUTH: (+1,  0, 'S'),
-    WEST:  ( 0, -1, 'W'),
+    NORTH: (-1, 0, "N"),
+    EAST: (0, +1, "E"),
+    SOUTH: (+1, 0, "S"),
+    WEST: (0, -1, "W"),
 }
 
 
@@ -22,8 +21,8 @@ def solve(
     height: int,
 ) -> list[str]:
 
-    start = (entry[1], entry[0])   # convert (col,row) to (row,col)
-    end   = (exit[1],  exit[0])
+    start = (entry[1], entry[0])  # convert (col,row) to (row,col)
+    end = (exit[1], exit[0])
 
     # queue stores: (row, col, path so far)
     queue: deque[tuple[int, int, list[str]]] = deque()
@@ -37,7 +36,6 @@ def solve(
             return path
 
         for direction, (dr, dc, letter) in DIRECTIONS.items():
-
 
             if grid[row][col] & direction:
                 continue
@@ -59,5 +57,3 @@ def solve(
             queue.append((new_row, new_col, path + [letter]))
 
     return []
-
-

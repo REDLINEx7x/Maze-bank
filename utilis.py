@@ -1,18 +1,12 @@
 def get_42_cells(width: int, height: int) -> set[tuple[int, int]]:
 
-    pattern = [
-            "#   ###",
-            "#     #",
-            "### ###",
-            "  # #  ",
-            "  # ###"
-        ]
+    pattern = ["#   ###", "#     #", "### ###", "  # #  ", "  # ###"]
     patt_height = len(pattern)
     patt_width = len(pattern[0])
 
     cells: set[tuple[int, int]] = set()
 
-    if height < patt_height + 2 or width < patt_width + 2 :
+    if height < patt_height + 2 or width < patt_width + 2:
         return cells
 
     start_row = (height - patt_height) // 2

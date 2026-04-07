@@ -35,26 +35,22 @@ class MazeGenerator:
         self.grid: list[list[int]] = []
 
         if self.seed is not None:
-            random.seed(self.seed)      # we need to add seed in config_file
+            random.seed(self.seed)  # we need to add seed in config_file
 
     def generate(self):
-        self._init_grid()           # 1. all walls closed         # 5. for "42" pattern
-        self._carve()               # 2. carve passages
+        self._init_grid()  # 1. all walls closed         # 5. for "42" pattern
+        self._carve()  # 2. carve passages
         if not self.perfect:
             self._add_extra_paths()
 
     def _init_grid(self):
-        self.grid = [[15 for _ in range(self.width)] for _ in range(self.height)]
+        self.grid = [
+            [15 for _ in range(self.width)] for _ in range(self.height)
+        ]
 
     def _create_42_pattern(self, visited: list[list[bool]]):
 
-        pattern = [
-            "#   ###",
-            "#     #",
-            "### ###",
-            "  # #  ",
-            "  # ###"
-        ]
+        pattern = ["#   ###", "#     #", "### ###", "  # #  ", "  # ###"]
 
         patt_height = len(pattern)
         patt_width = len(pattern[0])
@@ -84,7 +80,9 @@ class MazeGenerator:
         self._create_42_pattern(visited)
         self._starting_carve(start_row, start_col, visited)
 
-    def _starting_carve(self, row: int, col: int, visited: list[list[bool]]) -> None:
+    def _starting_carve(
+        self, row: int, col: int, visited: list[list[bool]]
+    ) -> None:
 
         visited[row][col] = True
         dir = list(DIRECTIONS.items())
@@ -180,7 +178,12 @@ class MazeGenerator:
                     return True
         return False
 
-#def display_maze_with_solution(grid: list[list[int]], entry: tuple[int, int], path: list[str]) -> None:
+
+# def display_maze_with_solution(
+#     grid: list[list[int]],
+#     entry: tuple[int, int],
+#     path: list[str],
+# ) -> None:
 #    height = len(grid)
 #    width = len(grid[0])
 
@@ -216,7 +219,7 @@ class MazeGenerator:
 #            else:
 #                bottom += "   +"
 #        print(bottom)
-#try:
+# try:
 #    config_data = parse_config("config.txt")
 
 #    maze = MazeGenerator(
@@ -232,5 +235,5 @@ class MazeGenerator:
 #    path = solve(maze.grid, maze.entry, maze.exit, maze.width, maze.height)
 #    display_maze_with_solution(maze.grid, maze.entry, path)
 #    print(path)
-#except Exception as e:
+# except Exception as e:
 #    print(e)

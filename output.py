@@ -1,5 +1,9 @@
-def generate_output(maze: list[list[int]], entry: tuple[int, int],
-                    exit: tuple[int, int], solution: list[str]) -> None:
+def generate_output(
+    maze: list[list[int]],
+    entry: tuple[int, int],
+    exit: tuple[int, int],
+    solution: list[str],
+) -> None:
     output = ""
     for row in maze:
         for cell in row:
