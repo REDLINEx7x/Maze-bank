@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by moamhouc.*
+*This project has been created as part of the 42 curriculum by moamhouc, ibouelba.*
 
 # A-Maze-ing
 
@@ -235,10 +235,6 @@ AI was consulted for:
 - **Documentation**: Structuring comprehensive technical explanations
 - **Debugging**: Troubleshooting coordinate system conversions (col,row vs row,col)
 
-AI was NOT used for:
-- Core algorithm design or implementation
-- Architecture decisions
-- The interactive UI/menu system
 
 ## Usage Examples
 
@@ -264,7 +260,7 @@ WIDTH=20
 HEIGHT=20
 ENTRY=0,0
 EXIT=19,19
-PERFECT=False
+PERFECT=True
 ```
 
 Then run:
