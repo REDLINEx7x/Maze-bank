@@ -1,17 +1,5 @@
 from collections import deque
-    #"""Find shortest path from entry to exit using BFS.
 
-    #Args:
-    #    grid:   the maze grid (2D list of ints)
-    #    entry:  (col, row) of the start cell
-    #    exit:   (col, row) of the end cell
-    #    width:  number of columns
-    #    height: number of rows
-
-    #Returns:
-    #    list of directions e.g. ['N','E','E','S']
-    #    empty list if no path found
-    #"""
 
 NORTH = 1
 EAST  = 2
@@ -26,7 +14,9 @@ DIRECTIONS = {
 }
 
 
-def solve(grid: list[list[int]], entry: tuple[int, int],
+def solve(
+    grid: list[list[int]],
+    entry: tuple[int, int],
     exit: tuple[int, int],
     width: int,
     height: int,

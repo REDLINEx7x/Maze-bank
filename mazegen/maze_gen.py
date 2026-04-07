@@ -1,8 +1,5 @@
-from typing import Any, Callable, Optional
+from typing import Optional
 import random
-from collections import deque
-from parsing import parse_config
-from maze_solve import solve
 
 NORTH = 1
 EAST = 2
@@ -41,7 +38,6 @@ class MazeGenerator:
             random.seed(self.seed)      # we need to add seed in config_file
 
     def generate(self):
-
         self._init_grid()           # 1. all walls closed         # 5. for "42" pattern
         self._carve()               # 2. carve passages
         if not self.perfect:
@@ -112,10 +108,10 @@ class MazeGenerator:
     def _add_extra_paths(self):
 
         total_cells = self.height * self.width
-        nedded_walls = total_cells // 10
+        needed_walls = total_cells // 10
         removed = 0
         tries = 0
-        while removed < nedded_walls and tries < 1000:
+        while removed < needed_walls and tries < 1000:
             tries += 1
             row = random.randint(0, self.height - 2)
             col = random.randint(0, self.width - 2)
