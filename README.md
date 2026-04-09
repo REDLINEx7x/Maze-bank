@@ -310,3 +310,23 @@ Value | Walls
 - UTF-8 encoding support for special characters
 - Color support (ANSI escape codes)
 
+## Resources
+
+### Maze Generation & Algorithms
+- [Maze Generation: Recursive Backtracking](https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking) — In-depth explanation of DFS-based maze generation
+- [GeeksforGeeks: Depth-First Search (DFS)](https://www.geeksforgeeks.org/dsa/depth-first-search-or-dfs-for-a-graph/) — DFS algorithm fundamentals and implementation
+- [GeeksforGeeks: Breadth-First Search (BFS)](https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/) — BFS pathfinding algorithm and use cases
+- [Computerphile: Maze Algorithms (YouTube)](https://www.youtube.com/watch?v=rop0W4QDOUI) — Visual walkthrough of maze generation and solving techniques
+
+### Pathfinding & Graph Theory
+- [GeeksforGeeks: Graph Algorithms](https://www.geeksforgeeks.org/dsa/graph-algorithms/) — Comprehensive graph algorithm reference
+- [GeeksforGeeks: A* Pathfinding](https://www.geeksforgeeks.org/a-search-algorithm/) — Advanced pathfinding for weighted graphs
+
+### Python Development
+- [Python Type Hints Documentation](https://docs.python.org/3/library/typing.html) — Static type checking with mypy
+- [PEP 8 Style Guide](https://pep8.org/) — Python code style standards
+- [flake8 Documentation](https://flake8.pycqa.org/) — Linting and code quality
+
+### Tools & References
+- [Claude (Anthropic)](https://claude.ai) — AI assistant for debugging, algorithm verification, and code review
+

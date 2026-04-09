@@ -56,6 +56,16 @@ def main() -> None:
     render = MazeRenderer(maze)
     display_solution = True
 
+    pattern = [
+        "#   ###",
+        "#     #",
+        "### ###",
+        "  # #  ",
+        "  # ###"
+    ]
+    patt_height = len(pattern)
+    patt_width = len(pattern[0])
+
     if not render.check_fits(len(maze), len(maze[0])):
         print("Terminal too small!")
     else:
@@ -72,6 +82,10 @@ def main() -> None:
             render.display_maze(maze, regenerate, display_solution, sol)
             generate_output(maze, CONFIG["ENTRY"], CONFIG["EXIT"], sol)
             regenerate = False
+
+            if maze_c.height < patt_height + 2 or maze_c.width < patt_width + 2:
+                print("the maze too small for 42 patt")
+
             print("\n=== A-Maze-ing ===")
             print("1. Re-generate a new maze")
             print("2. Show/Hide path from entry to exit")
