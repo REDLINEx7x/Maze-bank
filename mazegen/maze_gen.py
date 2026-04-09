@@ -1,5 +1,54 @@
 from typing import Optional
 import random
+import sys
+
+sys.setrecursionlimit(100000)
+
+"""
+    # mazegen
+
+A reusable maze generator for Python 3.10+.
+
+## Installation
+
+pip install mazegen-1.0.0-py3-none-any.whl
+
+## Basic usage
+
+from mazegen import MazeGenerator
+
+mg = MazeGenerator(
+    width   = 20,
+    height  = 15,
+    entry   = (0, 0),
+    exit_pt = (19, 14),
+    seed    = 42,
+    perfect = True,
+)
+
+mg.generate()
+
+print(mg.grid)       # 2D list of ints — the maze structure
+print(mg.solution)   # list of directions ['N','E','S',...]
+
+## Custom parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| width | int | required | number of columns |
+| height | int | required | number of rows |
+| entry | tuple | required | (col, row) of entry cell |
+| exit_pt | tuple | required | (col, row) of exit cell |
+| seed | int or None | None | random seed for reproducibility |
+| perfect | bool | True | True = one path only |
+
+## Accessing the maze
+
+mg.grid        # list[list[int]] — 2D grid of hex wall values
+mg.solution    # list[str]       — shortest path as directions
+mg.width       # int
+mg.height      # int
+"""
 
 NORTH = 1
 EAST = 2
@@ -38,19 +87,25 @@ class MazeGenerator:
             random.seed(self.seed)  # we need to add seed in config_file
 
     def generate(self):
-        self._init_grid()  # 1. all walls closed         # 5. for "42" pattern
-        self._carve()  # 2. carve passages
+        self._init_grid()
+        self._carve()
         if not self.perfect:
             self._add_extra_paths()
 
     def _init_grid(self):
         self.grid = [
-            [15 for _ in range(self.width)] for _ in range(self.height)
+            [15 for i in range(self.width)] for i in range(self.height)
         ]
 
     def _create_42_pattern(self, visited: list[list[bool]]):
 
-        pattern = ["#   ###", "#     #", "### ###", "  # #  ", "  # ###"]
+        pattern = [
+        "#   ###",
+        "#     #",
+        "### ###",
+        "  # #  ",
+        "  # ###"
+        ]
 
         patt_height = len(pattern)
         patt_width = len(pattern[0])

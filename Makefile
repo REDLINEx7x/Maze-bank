@@ -8,6 +8,9 @@ run:
 debug:
 	python3 -m pdb a_maze_ing.py config.txt
 
+build:
+	python -m build
+
 clean:
 	rm -rf __pycache__ .mypy_cache
 	rm -rf mazegen/__pycache__ mazegen/.mypy_cache
