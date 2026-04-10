@@ -86,25 +86,25 @@ class MazeGenerator:
         if self.seed is not None:
             random.seed(self.seed)  # we need to add seed in config_file
 
-    def generate(self):
+    def generate(self) -> None:
         self._init_grid()
         self._carve()
         if not self.perfect:
             self._add_extra_paths()
 
-    def _init_grid(self):
+    def _init_grid(self) -> None:
         self.grid = [
             [15 for i in range(self.width)] for i in range(self.height)
         ]
 
-    def _create_42_pattern(self, visited: list[list[bool]]):
+    def _create_42_pattern(self, visited: list[list[bool]]) -> None:
 
         pattern = [
-        "#   ###",
-        "#     #",
-        "### ###",
-        "  # #  ",
-        "  # ###"
+            "#   ###",
+            "#     #",
+            "### ###",
+            "  # #  ",
+            "  # ###"
         ]
 
         patt_height = len(pattern)
@@ -128,7 +128,7 @@ class MazeGenerator:
                     self.grid[r][c] = 0xF
                     visited[r][c] = True
 
-    def _carve(self):
+    def _carve(self) -> None:
         visited = [[False] * self.width for _ in range(self.height)]
         start_row = self.entry[1]
         start_col = self.entry[0]
@@ -158,7 +158,7 @@ class MazeGenerator:
             self.grid[new_row][new_col] &= ~opposite
             self._starting_carve(new_row, new_col, visited)
 
-    def _add_extra_paths(self):
+    def _add_extra_paths(self) -> None:
 
         total_cells = self.height * self.width
         needed_walls = total_cells // 10

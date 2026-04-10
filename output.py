@@ -15,5 +15,5 @@ def generate_output(
     for sol in solution:
         output += f"{sol}"
     output += "\n"
-    with open("output_maze.txt", "w") as f:
+    with open("maze.txt", "w") as f:
         f.write(output)
