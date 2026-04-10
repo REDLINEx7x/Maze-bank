@@ -85,7 +85,7 @@ def main() -> None:
 
             if maze_c.height < patt_height + 2 or \
                     maze_c.width < patt_width + 2:
-                print("the maze too small for 42 patt")
+                print("the maze too small for 42 pattern")
 
             print("\n=== A-Maze-ing ===")
             print("1. Re-generate a new maze")

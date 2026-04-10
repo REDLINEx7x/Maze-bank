@@ -167,13 +167,24 @@ PERFECT=True
 ## Team & Project Management
 
 ### Team
-- **moamhouc**: Full-stack development (architecture, generation, solving, rendering, UI)
+- **moamhouc**: Maze generation (DFS), BFS solving algorithm, Makefile configuration
+- **ibouelba**: Terminal rendering (display.py), Configuration parsing (parsing.py), Output serialization (output.py)
 
 ### Individual Roles
-- Algorithm selection and implementation
-- Code architecture and modularization
-- Testing and validation
-- Documentation
+
+**moamhouc**:
+- Implemented DFS recursive backtracking maze generation algorithm
+- Implemented BFS breadth-first search solver for shortest path
+- Created and maintained Makefile for build automation, installation, and linting tasks
+- Handled coordinate system conversions and grid indexing
+- Main application logic in a_maze_ing.py (entry/exit validation, main loop)
+
+**ibouelba**:
+- Designed and implemented terminal renderer with ASCII art and color support
+- Built configuration file parser with validation and error handling
+- Created maze serialization to hex format output
+- Implemented animation and interactive menu system in display.py
+- Managed user input and visual presentation
 
 ### Development Evolution
 
