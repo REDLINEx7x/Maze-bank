@@ -34,7 +34,7 @@ class MazeRenderer:
         self.exit = " X "
         self.path = " ▪ "
 
-    def cycle_color(self, color) -> int:
+    def cycle_color(self, color: int) -> int:
         return (color + 1) % len(self.COLOR_NAMES)
 
     def _get_char(self, char: str, color_index: int) -> str:

@@ -83,7 +83,8 @@ def main() -> None:
             generate_output(maze, CONFIG["ENTRY"], CONFIG["EXIT"], sol)
             regenerate = False
 
-            if maze_c.height < patt_height + 2 or maze_c.width < patt_width + 2:
+            if maze_c.height < patt_height + 2 or \
+                    maze_c.width < patt_width + 2:
                 print("the maze too small for 42 patt")
 
             print("\n=== A-Maze-ing ===")
