@@ -1,7 +1,7 @@
 import shutil
 import time
 import sys
-from parsing import parse_config
+from mazegen.parsing import parse_config
 
 CONFIG = parse_config(sys.argv[1])
 
@@ -24,7 +24,7 @@ class MazeRenderer:
         self.sol_color = 2
         self.entry_color = 2
         self.exit_color = 4
-        self.animation_delay = 0.01
+        self.animation_delay = 0.02
         self.corner = "◆"
         self.v_wall = "║"
         self.h_wall = "═══"

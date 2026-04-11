@@ -1,5 +1,5 @@
 from typing import Any
-from utilis import get_42_cells
+from mazegen.utilis import get_42_cells
 
 
 def parse_config(filename: str) -> dict[str, Any]:
@@ -40,6 +40,8 @@ def parse_config(filename: str) -> dict[str, Any]:
                     final_config[key] = False
                 else:
                     raise Exception("invalid configuration")
+            elif key == "OUTPUT_FILE":
+                final_config[key] = config[key].lower()
             elif key == "SEED":
                 try:
                     final_config[key] = int(config[key])

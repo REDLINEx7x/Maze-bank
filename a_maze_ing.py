@@ -1,6 +1,6 @@
 from mazegen.maze_gen import MazeGenerator
-from parsing import parse_config
-from output import generate_output
+from mazegen.parsing import parse_config
+from mazegen.output import generate_output
 import os
 import sys
 
@@ -37,7 +37,7 @@ def main() -> None:
     else:
         raise FileNotFoundError("please enter a config file")
 
-    from display import MazeRenderer
+    from mazegen.display import MazeRenderer
     from mazegen.maze_solve import solve
 
     maze_c = MazeGenerator(
@@ -80,14 +80,16 @@ def main() -> None:
                 maze_c.height,
             )
             render.display_maze(maze, regenerate, display_solution, sol)
-            generate_output(maze, CONFIG["ENTRY"], CONFIG["EXIT"], sol)
+            print()
+            generate_output(maze, CONFIG["ENTRY"], CONFIG["EXIT"],
+                            sol, CONFIG["OUTPUT_FILE"])
             regenerate = False
 
             if maze_c.height < patt_height + 2 or \
                     maze_c.width < patt_width + 2:
-                print("the maze too small for 42 pattern")
+                print("\033[91mthe maze too small for 42 pattern\033[0m")
 
-            print("\n=== A-Maze-ing ===")
+            print("=== A-Maze-ing ===")
             print("1. Re-generate a new maze")
             print("2. Show/Hide path from entry to exit")
             print("3. Cycle maze colors")

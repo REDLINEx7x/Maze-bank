@@ -84,7 +84,7 @@ class MazeGenerator:
         self.grid: list[list[int]] = []
 
         if self.seed is not None:
-            random.seed(self.seed)  # we need to add seed in config_file
+            random.seed(self.seed)
 
     def generate(self) -> None:
         self._init_grid()
@@ -232,63 +232,3 @@ class MazeGenerator:
                 if all_open:
                     return True
         return False
-
-
-# def display_maze_with_solution(
-#     grid: list[list[int]],
-#     entry: tuple[int, int],
-#     path: list[str],
-# ) -> None:
-#    height = len(grid)
-#    width = len(grid[0])
-
-#    solution_cells = set()
-#    curr_r, curr_c = entry[1], entry[0]
-#    solution_cells.add((curr_r, curr_c))
-
-#    for move in path:
-#         if move == 'N': curr_r -= 1
-#         elif move == 'S': curr_r += 1
-#         elif move == 'E': curr_c += 1
-#         elif move == 'W': curr_c -= 1
-#         solution_cells.add((curr_r, curr_c))
-
-#     # 2. R-Resm
-#    print("+" + "---+" * width)
-
-#    for r, row in enumerate(grid):
-#        line = "|"
-#        for c, cell in enumerate(row):
-#            char = " . " if (r, c) in solution_cells else "   "
-
-#            if cell & 2:
-#                line += char + "|"
-#            else:
-#                line += char + " "
-#        print(line)
-
-#        bottom = "+"
-#        for c, cell in enumerate(row):
-#            if cell & 4:
-#                bottom += "---+"
-#            else:
-#                bottom += "   +"
-#        print(bottom)
-# try:
-#    config_data = parse_config("config.txt")
-
-#    maze = MazeGenerator(
-#        width=config_data['WIDTH'],
-#        height=config_data['HEIGHT'], # Reproducibility daroriya
-#        entry=config_data['ENTRY'],
-#        exit=config_data['EXIT'],
-#        perfect=config_data['PERFECT'],
-#        seed=config_data['SEED'],
-#    )
-
-#    maze.generate()
-#    path = solve(maze.grid, maze.entry, maze.exit, maze.width, maze.height)
-#    display_maze_with_solution(maze.grid, maze.entry, path)
-#    print(path)
-# except Exception as e:
-#    print(e)
